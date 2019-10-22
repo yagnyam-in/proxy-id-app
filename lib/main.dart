@@ -1,101 +1,139 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:proxy_id/choose_proxy_universe_page.dart';
+import 'package:proxy_id/config/app_configuration.dart';
+import 'package:proxy_id/home_page.dart';
+import 'package:proxy_id/localizations.dart';
+import 'package:proxy_id/services/app_configuration_bloc.dart';
+import 'package:proxy_id/widgets/async_helper.dart';
+import 'package:proxy_id/widgets/flat_button_with_icon.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+import 'create_or_recover_account_page.dart';
+import 'services/service_factory.dart';
+import 'welcome_page.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+void main() {
+  Crashlytics.instance.enableInDevMode = true;
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+  runApp(ProxyIdApp());
+}
+
+class ProxyIdApp extends StatefulWidget {
+  @override
+  State<ProxyIdApp> createState() {
+    return ProxyIdAppState();
+  }
+}
+
+class ProxyIdAppState extends LoadingSupportState<ProxyIdApp> {
+  Stream<AppConfiguration> _appConfigurationStream;
+  bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    ServiceFactory.bootService().warmUpBackends();
+    _appConfigurationStream = AppConfigurationBloc.instance.appConfigurationStream;
+    AppConfigurationBloc.instance.refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      // locale: const Locale('nl', 'NL'),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
+      onGenerateTitle: (BuildContext context) => ProxyLocalizations.of(context).title,
+      localizationsDelegates: [
+        const ProxyLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('nl', 'NL'),
+        const Locale('te', 'IN'),
+      ],
+      home: streamBuilder(
+        stream: _appConfigurationStream,
+        builder: _body,
+        errorWidget: _errorWidget(context),
+        name: 'AppConfiguration',
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
-        '/first': (context) => FirstScreen(),
-        '/second': (context) => SecondScreen(),
-      },
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool _absorbing = false;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _errorWidget(BuildContext context) {
+    // This can be null
+    ProxyLocalizations localizations = ProxyLocalizations.of(context);
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(localizations?.unexpectedError ?? 'Unexpected Error'),
       ),
-      body: AbsorbPointer(
-        absorbing: _absorbing,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                child: Text('Pres Me'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/first');
-                },
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 8.0),
+        child: ListView(
+          children: <Widget>[
+            const SizedBox(height: 32.0),
+            Center(child: Text(localizations?.somethingWentWrong ?? 'Something went wrong')),
+            const SizedBox(height: 32.0),
+            FlatButtonWithIcon(
+              icon: Icon(Icons.refresh),
+              label: Text(localizations?.retry ?? 'Retry'),
+              onPressed: _recoverFromFailure,
+            )
+          ],
         ),
       ),
     );
   }
 
-}
-
-class FirstScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('First Screen'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Launch Second screen'),
-          onPressed: () {
-            Navigator.pushNamed(context, '/second');
-          },
-        ),
-      ),
-    );
+  void _recoverFromFailure() async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      await sharedPreferences.clear();
+    } catch (e) {
+      print("Failed to clear shared preferences");
+    }
+    try {
+      await FlutterSecureStorage().deleteAll();
+    } catch (e) {
+      print("Failed to clear secure storage");
+    }
+    AppConfigurationBloc.instance.refresh();
   }
-}
 
-class SecondScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Second Screen"),
-      ),
-      body: Center(
-        child: RaisedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('Go back!'),
-        ),
-      ),
-    );
+  Widget _body(BuildContext context, AppConfiguration appConfiguration) {
+    print("Painting Main Page with appConfiguration $appConfiguration");
+    if (appConfiguration.firebaseUser == null || appConfiguration.appUser == null) {
+      print("Returning Login Page");
+      return WelcomePage(
+        appConfiguration,
+        key: ValueKey(appConfiguration),
+      );
+    } else if (appConfiguration.account == null ||
+        appConfiguration.passPhrase == null ||
+        appConfiguration.account.masterProxyId == null) {
+      print("Returning Account Setup Page");
+      return CreateOrRecoverAccount(
+        appConfiguration,
+        key: ValueKey(appConfiguration),
+      );
+    } else if (appConfiguration.proxyUniverse == null) {
+      print("Returning Choose Proxy Universe Page");
+      return ChooseProxyUniverse(
+        appConfiguration,
+        key: ValueKey(appConfiguration),
+      );
+    } else {
+      print("Returning Home Page");
+      return HomePage(
+        appConfiguration,
+        key: ValueKey(appConfiguration),
+      );
+    }
   }
 }
