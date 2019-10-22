@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "127060036030",
+    "firebase_url": "https://proxy-id-app.firebaseio.com",
+    "project_id": "proxy-id-app",
+    "storage_bucket": "proxy-id-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127060036030:android:893b4d4b80b404c2f811ef",
+        "android_client_info": {
+          "package_name": "in.yagnyam.pid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127060036030-nj5r99jjbe8ubmatlepnhq011n6qun96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBREX-3w-zP3kGWIdtAYrcjKS2jvXoZNjI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127060036030-nj5r99jjbe8ubmatlepnhq011n6qun96.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127060036030-i5iell19rm87uo153ecn07cl2cts2mrp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.yagnyam.pid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

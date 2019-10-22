@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>127060036030-i5iell19rm87uo153ecn07cl2cts2mrp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.127060036030-i5iell19rm87uo153ecn07cl2cts2mrp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD1ANftJweU2VT91xEGXRkpsXIpPpUk1sY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>127060036030</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>in.yagnyam.pid</string>
+	<key>PROJECT_ID</key>
+	<string>proxy-id-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>proxy-id-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:127060036030:ios:3d76d31bde937252f811ef</string>
+	<key>DATABASE_URL</key>
+	<string>https://proxy-id-app.firebaseio.com</string>
+</dict>
+</plist>
