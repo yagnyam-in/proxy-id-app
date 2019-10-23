@@ -8,5 +8,5 @@ class Constants {
   static const String IOS_APP_STORE_URL = "https://apps.apple.com/app/id$IOS_APP_STORE_ID";
   static const String ANDROID_PLAY_STORE_URL = "market://details?id=$ANDROID_PACKAGE_NAME";
 
-  static final ProxyId PROXY_ID_APP_BACKEND_PROXY_ID = ProxyId("proxy-id-app", "");
+  static final ProxyId PROXY_ID_APP_BACKEND_PROXY_ID = ProxyId("proxy-id-app", "eOR-DX4DpYaSfWc5kOMpZL8ZDmf8bvtBpsEckGq5Zpc");
 }

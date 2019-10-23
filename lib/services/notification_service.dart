@@ -49,6 +49,7 @@ class NotificationService with ProxyUtils, HttpClientUtils {
   }
 
   void _start() {
+    print("Started Notification Service");
     _firebaseMessaging.requestNotificationPermissions();
     _firebaseMessaging.onTokenRefresh.listen(_tokenRefresh, onError: _tokenRefreshFailure);
     _firebaseMessaging.configure(
@@ -59,7 +60,7 @@ class NotificationService with ProxyUtils, HttpClientUtils {
   }
 
   void _tokenRefresh(String newToken) async {
-    // print("New FCM Token $newToken");
+    print("New FCM Token $newToken");
     AppConfiguration appConfiguration = AppConfigurationBloc.instance.appConfiguration;
     if (newToken != null && appConfiguration != null && appConfiguration.isComplete) {
       ProxyKeyStore proxyKeyStore = ProxyKeyStore(appConfiguration);

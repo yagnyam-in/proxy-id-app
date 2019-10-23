@@ -8,12 +8,10 @@ import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/constants.dart';
 import 'package:proxy_id/db/device_store.dart';
 import 'package:proxy_id/db/proxy_key_store.dart';
-import 'package:proxy_id/identity/services/banking_service_factory.dart';
 import 'package:proxy_id/model/device_entity.dart';
 import 'package:proxy_id/services/alert_factory.dart';
 import 'package:proxy_id/url_config.dart';
 import 'package:proxy_messages/banking.dart';
-import 'package:proxy_messages/payments.dart';
 import 'package:quiver/collection.dart';
 import 'package:quiver/strings.dart';
 import 'package:uuid/uuid.dart';
@@ -131,17 +129,9 @@ class AlertService with ProxyUtils, HttpClientUtils {
   Future<void> _processAlert(SignableAlertMessage alert) async {
     print("processAlert $alert");
     if (alert is AccountUpdatedAlert) {
-      return BankingServiceFactory.bankingService(appConfiguration).processAccountUpdatedAlert(alert);
+      print("$alert is not handled");
     } else if (alert is DepositUpdatedAlert) {
-      return BankingServiceFactory.depositService(appConfiguration).processDepositUpdatedAlert(alert);
-    } else if (alert is WithdrawalUpdatedAlert) {
-      return BankingServiceFactory.withdrawalService(appConfiguration).processWithdrawalUpdatedAlert(alert);
-    } else if (alert is PaymentAuthorizationUpdatedAlert) {
-      return BankingServiceFactory.paymentAuthorizationService(appConfiguration)
-          .processPaymentAuthorizationUpdatedAlert(alert);
-    } else if (alert is PaymentEncashmentUpdatedAlert) {
-      return BankingServiceFactory.paymentEncashmentService(appConfiguration)
-          .processPaymentEncashmentUpdatedAlert(alert);
+      print("$alert is not handled");
     } else {
       print("$alert is not handled");
     }
@@ -150,17 +140,9 @@ class AlertService with ProxyUtils, HttpClientUtils {
   Future<void> _processLiteAlert(LiteAlert alert) async {
     print("processLiteAlert $alert");
     if (alert is AccountUpdatedLiteAlert) {
-      return BankingServiceFactory.bankingService(appConfiguration).processAccountUpdatedLiteAlert(alert);
+      print("$alert is not handled");
     } else if (alert is DepositUpdatedLiteAlert) {
-      return BankingServiceFactory.depositService(appConfiguration).processDepositUpdatedLiteAlert(alert);
-    } else if (alert is WithdrawalUpdatedLiteAlert) {
-      return BankingServiceFactory.withdrawalService(appConfiguration).processWithdrawalUpdatedLiteAlert(alert);
-    } else if (alert is PaymentAuthorizationUpdatedLiteAlert) {
-      return BankingServiceFactory.paymentAuthorizationService(appConfiguration)
-          .processPaymentAuthorizationUpdatedLiteAlert(alert);
-    } else if (alert is PaymentEncashmentUpdatedLiteAlert) {
-      return BankingServiceFactory.paymentEncashmentService(appConfiguration)
-          .processPaymentEncashmentUpdatedLiteAlert(alert);
+      print("$alert is not handled");
     } else {
       print("$alert is not handled");
     }

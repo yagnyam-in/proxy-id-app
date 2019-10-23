@@ -1,6 +1,7 @@
 import 'package:proxy_core/core.dart';
 import 'package:proxy_core/services.dart';
 import 'package:proxy_id/config/app_configuration.dart';
+import 'package:proxy_id/url_config.dart';
 
 import 'service_factory.dart';
 
@@ -11,7 +12,7 @@ class BootService with ProxyUtils, HttpClientUtils, DebugUtils {
   BootService({
     String backendHealthCheck,
     HttpClientFactory httpClientFactory,
-  })  : backendHealthCheck = backendHealthCheck ?? "https://app.pid.yagnyam.in/health-check",
+  })  : backendHealthCheck = backendHealthCheck ?? "${UrlConfig.APP_BACKEND}/health-check",
         httpClientFactory = httpClientFactory ?? ProxyHttpClient.client {
     assert(isNotEmpty(this.backendHealthCheck));
   }
@@ -20,7 +21,7 @@ class BootService with ProxyUtils, HttpClientUtils, DebugUtils {
     get(httpClientFactory(), backendHealthCheck).then((health) {
       print("PiD Backend Health Check $health");
     }, onError: (error) {
-      print("PiD Backend Health Check $error");
+      print("PiD Backend Health Check at $backendHealthCheck: $error");
     });
   }
 

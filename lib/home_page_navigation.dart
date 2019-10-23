@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:proxy_id/localizations.dart';
 
 enum HomePage {
-  ProxyAccountsPage,
+  AppAuthorizationsPage,
   EventsPage,
-  BankAccountsPage,
   SettingsPage,
 }
 
@@ -33,17 +32,14 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
 
   _BottomNavigationBarState(this.changeHomePage, this.homePage, this.busy) {
     switch (homePage) {
-      case HomePage.ProxyAccountsPage:
+      case HomePage.AppAuthorizationsPage:
         _selectedIndex = 0;
         break;
       case HomePage.EventsPage:
         _selectedIndex = 1;
         break;
-      case HomePage.BankAccountsPage:
-        _selectedIndex = 2;
-        break;
       case HomePage.SettingsPage:
-        _selectedIndex = 3;
+        _selectedIndex = 2;
         break;
       default:
         _selectedIndex = 0;
@@ -58,20 +54,17 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
     });
     switch (_selectedIndex) {
       case 0:
-        changeHomePage(HomePage.ProxyAccountsPage);
+        changeHomePage(HomePage.AppAuthorizationsPage);
         break;
       case 1:
         changeHomePage(HomePage.EventsPage);
         break;
       case 2:
-        changeHomePage(HomePage.BankAccountsPage);
-        break;
-      case 3:
         changeHomePage(HomePage.SettingsPage);
         break;
       default:
         print("HomePage for $_selectedIndex is not handled");
-        changeHomePage(HomePage.ProxyAccountsPage);
+        changeHomePage(HomePage.AppAuthorizationsPage);
         break;
     }
   }
@@ -83,16 +76,12 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
     return BottomNavigationBar(
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance_wallet),
-          title: Text(localizations.proxyAccountsPageNavigationLabel),
+          icon: Icon(Icons.fingerprint),
+          title: Text(localizations.authorizationsPageNavigationLabel),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.event),
           title: Text(localizations.eventsPageNavigationLabel),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_balance),
-          title: Text(localizations.receivingAccountsNavigationLabel),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_box),

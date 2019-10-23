@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:proxy_id/authorizations_helper.dart';
 import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/home_page_navigation.dart';
 import 'package:proxy_id/localizations.dart';
@@ -10,16 +9,9 @@ import 'package:proxy_id/widgets/enticement_helper.dart';
 import 'package:uuid/uuid.dart';
 
 import 'db/event_store.dart';
-import 'deposit_helper.dart';
 import 'events_helper.dart';
-import 'model/deposit_event.dart';
 import 'model/event_entity.dart';
-import 'model/payment_authorization_event.dart';
-import 'model/payment_encashment_event.dart';
-import 'model/withdrawal_event.dart';
-import 'payment_authorization_helper.dart';
-import 'proxy_account_helper.dart';
-import 'services/banking_service_factory.dart';
+import 'app_authorizations_helper.dart';
 import 'widgets/event_card.dart';
 
 final Uuid uuidFactory = Uuid();
@@ -40,14 +32,7 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends LoadingSupportState<EventsPage>
-    with
-        HomePageNavigation,
-        EnticementHelper,
-        DepositHelper,
-        PaymentAuthorizationHelper,
-        AccountHelper,
-        EventsHelper,
-        AuthorizationsHelper {
+    with HomePageNavigation, EnticementHelper, AppAuthorizationsHelper, EventsHelper {
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
   bool loading = false;
@@ -156,30 +141,6 @@ class _EventsPageState extends LoadingSupportState<EventsPage>
   Future<void> _refreshEvent(BuildContext context, EventEntity event) async {
     switch (event.eventType) {
       case EventType.Deposit:
-        await BankingServiceFactory.depositService(widget.appConfiguration).refreshDepositStatus(
-          proxyUniverse: event.proxyUniverse,
-          depositId: (event as DepositEvent).depositId,
-        );
-        break;
-      case EventType.Withdrawal:
-        await BankingServiceFactory.withdrawalService(widget.appConfiguration).refreshWithdrawalStatus(
-          proxyUniverse: event.proxyUniverse,
-          withdrawalId: (event as WithdrawalEvent).withdrawalId,
-        );
-        break;
-      case EventType.PaymentAuthorization:
-        await BankingServiceFactory.paymentAuthorizationService(widget.appConfiguration)
-            .refreshPaymentAuthorizationStatus(
-          proxyUniverse: event.proxyUniverse,
-          paymentAuthorizationId: (event as PaymentAuthorizationEvent).paymentAuthorizationId,
-        );
-        break;
-      case EventType.PaymentEncashment:
-        await BankingServiceFactory.paymentEncashmentService(widget.appConfiguration).refreshPaymentEncashmentStatus(
-          proxyUniverse: event.proxyUniverse,
-          paymentAuthorizationId: (event as PaymentEncashmentEvent).paymentAuthorizationId,
-          paymentEncashmentId: (event as PaymentEncashmentEvent).paymentEncashmentId,
-        );
         break;
       default:
         print("Not yet handled");

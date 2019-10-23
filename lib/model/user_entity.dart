@@ -60,11 +60,11 @@ class UserEntity {
   @override
   String toString() {
     return {
-      uid: uid,
-      accountId: accountId,
-      name: name,
-      phone: phone,
-      email: email,
+      'uid': uid,
+      'accountId': accountId,
+      'name': name,
+      'phone': phone,
+      'email': email,
     }.toString();
   }
 

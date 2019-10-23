@@ -994,9 +994,7 @@ class ProxyLocalizations {
   String get makePaymentDescription =>
       Intl.message("Its very easy to make Payment, you don't need to know any account details to make payment");
 
-  String get proxyAccountsPageTitle => Intl.message('Anonymous Accounts');
-
-  String get receivingAccountsTitle => Intl.message('Bank Accounts');
+  String get appAuthorizationsPageTitle => Intl.message('Authorizations');
 
   String get authorizePhoneNumber => Intl.message('Verify Phone');
 
@@ -1028,9 +1026,7 @@ class ProxyLocalizations {
 
   String get noEvents => Intl.message('No Events');
 
-  String get addAccountFabLabel => Intl.message('Add');
-
-  String get payFabLabel => Intl.message('Pay');
+  String get authorizeFabLabel => Intl.message('Authorize');
 
   String get unexpectedError => Intl.message('Unexpected Error');
 
@@ -1092,18 +1088,13 @@ class ProxyLocalizations {
 
   String get depositActionItemTitle => Intl.message('Add Funds');
 
-  String get noProxyAccountsTitle => Intl.message('No Money found');
+  String get noAppAuthorizationsTitle => Intl.message('No App Authorizations');
 
-  String get noProxyAccountsDescription => Intl.message('Start by adding funds, so that you can transact faster');
+  String get noAppAuthorizationsDescription => Intl.message('You have not authorized any Apps. Once you authorize Apps, they will appear here.');
 
-  String get noEventsTitle => Intl.message('No Transactions found');
+  String get noEventsTitle => Intl.message('No Events found');
 
-  String get noEventsDescription => Intl.message('Start by adding funds, so that you can transact faster');
-
-  String get noReceivingAccountsTitle => Intl.message('No Accounts found');
-
-  String get noReceivingAccountsDescription =>
-      Intl.message('Start by adding your Bank Account. So that, you can withdraw money to your Bank Account');
+  String get noEventsDescription => Intl.message('No Activity found. Once you authorize Apps, your activity will appear here.');
 
   String get setupPassPhraseButtonLabel => Intl.message('Setup');
 
@@ -1117,7 +1108,7 @@ class ProxyLocalizations {
 
   String get testButtonLabel => Intl.message('Test');
 
-  String get proxyAccountsPageNavigationLabel => Intl.message('Anonymous');
+  String get authorizationsPageNavigationLabel => Intl.message('Authorizations');
 
   String get eventsPageNavigationLabel => Intl.message('Events');
 

@@ -8,14 +8,10 @@ import 'package:proxy_id/home_page_navigation.dart';
 import 'package:proxy_id/localizations.dart';
 import 'package:proxy_id/services/account_service.dart';
 import 'package:proxy_id/services/app_configuration_bloc.dart';
-import 'package:proxy_id/services/service_factory.dart';
-import 'package:proxy_id/url_config.dart';
 import 'package:proxy_id/widgets/async_helper.dart';
 import 'package:proxy_id/widgets/loading.dart';
 import 'package:quiver/strings.dart';
-import 'package:share/share.dart';
 
-import 'authorizations_page.dart';
 import 'config/app_configuration.dart';
 import 'model/account_entity.dart';
 import 'utils/conversion_utils.dart';
@@ -138,8 +134,6 @@ class _SettingsWidgetState extends State<_SettingsWidget> {
       const Divider(),
       _PassPhraseWidget(appConfiguration: appConfiguration),
       const Divider(),
-      _authorizationWidget(context),
-      const Divider(),
       _proxyUniverseWidget(context),
       const Divider(),
       _aboutWidget(context),
@@ -185,12 +179,6 @@ class _SettingsWidgetState extends State<_SettingsWidget> {
         onTap: () => _changeName(context),
         child: Text(
           displayName?.toUpperCase() ?? '🖊️️ ' + localizations.changeNameTitle,
-        ),
-      ),
-      trailing: GestureDetector(
-        onTap: () => _shareProfile(context),
-        child: Icon(
-          Icons.share,
         ),
       ),
     );
@@ -282,32 +270,6 @@ class _SettingsWidgetState extends State<_SettingsWidget> {
     );
   }
 
-  Widget _authorizationWidget(BuildContext context) {
-    ProxyLocalizations localizations = ProxyLocalizations.of(context);
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        new MaterialPageRoute(
-          builder: (context) => AuthorizationsPage(appConfiguration),
-        ),
-      ),
-      child: ListTile(
-        title: Text(
-          localizations.authorizationsTitle,
-        ),
-        subtitle: Padding(
-          padding: EdgeInsets.only(top: 8.0),
-          child: Text(
-            localizations.authorizationsDescription,
-          ),
-        ),
-        trailing: Icon(
-          Icons.verified_user,
-        ),
-      ),
-    );
-  }
-
   void _changeName(BuildContext context) async {
     ProxyLocalizations localizations = ProxyLocalizations.of(context);
     String newName = await acceptNameDialog(
@@ -360,23 +322,6 @@ class _SettingsWidgetState extends State<_SettingsWidget> {
         accountEntity = updatedAccount;
       });
     }
-  }
-
-  Future<void> _shareProfile(BuildContext context) async {
-    ProxyLocalizations localizations = ProxyLocalizations.of(context);
-    ProxyId proxyId = appConfiguration.masterProxyId;
-    Uri link = Uri.parse("${UrlConfig.PROXY_CENTRAL}/actions/add-me"
-        "?${SettingsPage.PROXY_ID_PARAM}=${proxyId.id}"
-        "&${SettingsPage.PROXY_SHA256_PARAM}=${proxyId.sha256Thumbprint}");
-    var shortLink = await ServiceFactory.deepLinkService().createDeepLink(
-      link,
-      title: localizations.shareProfileTitle,
-      description: localizations.shareProfileDescription,
-    );
-    var message =
-        localizations.addMeToYourContacts(shortLink.toString()) + (isNotEmpty(displayName) ? ' - $displayName' : '');
-
-    await Share.share(message);
   }
 
   void _changeProxyUniverse(BuildContext context) {

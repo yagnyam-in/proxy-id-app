@@ -4,42 +4,36 @@ import 'package:proxy_id/settings_page.dart';
 
 import 'home_page_navigation.dart';
 import 'identity/events_page.dart';
-import 'identity/proxy_accounts_page.dart';
-import 'identity/receiving_accounts_page.dart';
+import 'identity/app_authorizations_page.dart';
 
-class BankingHome extends StatefulWidget {
+class IdentityHome extends StatefulWidget {
   final AppConfiguration appConfiguration;
 
-  const BankingHome(this.appConfiguration, {Key key}) : super(key: key);
+  const IdentityHome(this.appConfiguration, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _BankingHomeState(appConfiguration);
+    return _IdentityHomeState(appConfiguration);
   }
 }
 
-class _BankingHomeState extends State<BankingHome> {
+class _IdentityHomeState extends State<IdentityHome> {
   final AppConfiguration appConfiguration;
 
-  HomePage _homePage = HomePage.ProxyAccountsPage;
+  HomePage _homePage = HomePage.AppAuthorizationsPage;
 
-  _BankingHomeState(this.appConfiguration);
+  _IdentityHomeState(this.appConfiguration);
 
   @override
   Widget build(BuildContext context) {
     switch (_homePage) {
-      case HomePage.ProxyAccountsPage:
-        return ProxyAccountsPage(
+      case HomePage.AppAuthorizationsPage:
+        return AppAuthorizationsPage(
           appConfiguration,
           changeHomePage: changeHomePage,
         );
       case HomePage.EventsPage:
         return EventsPage(
-          appConfiguration,
-          changeHomePage: changeHomePage,
-        );
-      case HomePage.BankAccountsPage:
-        return ReceivingAccountsPage.manage(
           appConfiguration,
           changeHomePage: changeHomePage,
         );
@@ -49,7 +43,7 @@ class _BankingHomeState extends State<BankingHome> {
           changeHomePage: changeHomePage,
         );
       default:
-        return ProxyAccountsPage(
+        return AppAuthorizationsPage(
           appConfiguration,
           changeHomePage: changeHomePage,
         );

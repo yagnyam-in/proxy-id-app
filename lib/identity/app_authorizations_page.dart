@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:proxy_core/core.dart';
-import 'package:proxy_id/authorizations_helper.dart';
 import 'package:proxy_id/config/app_configuration.dart';
-import 'package:proxy_id/contacts_page.dart';
 import 'package:proxy_id/home_page_navigation.dart';
 import 'package:proxy_id/localizations.dart';
 import 'package:proxy_id/model/action_menu_item.dart';
@@ -20,20 +18,17 @@ import 'package:proxy_id/widgets/loading.dart';
 import 'package:uuid/uuid.dart';
 
 import 'db/proxy_account_store.dart';
-import 'deposit_helper.dart';
 import 'model/proxy_account_entity.dart';
-import 'payment_authorization_helper.dart';
-import 'proxy_account_helper.dart';
+import 'app_authorizations_helper.dart';
 import 'widgets/account_card.dart';
-import 'withdrawal_helper.dart';
 
 final Uuid uuidFactory = Uuid();
 
-class ProxyAccountsPage extends StatefulWidget {
+class AppAuthorizationsPage extends StatefulWidget {
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
 
-  ProxyAccountsPage(
+  AppAuthorizationsPage(
     this.appConfiguration, {
     Key key,
     @required this.changeHomePage,
@@ -43,24 +38,14 @@ class ProxyAccountsPage extends StatefulWidget {
   }
 
   @override
-  _ProxyAccountsPageState createState() {
-    return _ProxyAccountsPageState(appConfiguration, changeHomePage);
+  _AppAuthorizationsPageState createState() {
+    return _AppAuthorizationsPageState(appConfiguration, changeHomePage);
   }
 }
 
-class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
-    with
-        ProxyUtils,
-        EnticementHelper,
-        HomePageNavigation,
-        DepositHelper,
-        PaymentAuthorizationHelper,
-        WithdrawalHelper,
-        AccountHelper,
-        AuthorizationsHelper,
-        UpgradeHelper {
+class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsPage>
+    with ProxyUtils, EnticementHelper, HomePageNavigation, AppAuthorizationsHelper, UpgradeHelper {
   static const String DEPOSIT = "deposit";
-  static const String CONTACTS = "contacts";
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
 
@@ -71,7 +56,7 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
   bool loading = false;
   Timer _newVersionCheckTimer;
 
-  _ProxyAccountsPageState(this.appConfiguration, this.changeHomePage);
+  _AppAuthorizationsPageState(this.appConfiguration, this.changeHomePage);
 
   @override
   void initState() {
@@ -103,7 +88,6 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
     ProxyLocalizations localizations = ProxyLocalizations.of(context);
     return [
       ActionMenuItem(title: localizations.depositActionItemTitle, icon: Icons.file_download, action: DEPOSIT),
-      ActionMenuItem(title: localizations.contactsItemTitle, icon: Icons.contacts, action: CONTACTS),
     ];
   }
 
@@ -114,7 +98,7 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(localizations.proxyAccountsPageTitle + appConfiguration.proxyUniverseSuffix),
+        title: Text(localizations.appAuthorizationsPageTitle + appConfiguration.proxyUniverseSuffix),
         actions: <Widget>[
           PopupMenuButton<ActionMenuItem>(
             onSelected: (action) => _onAction(context, action),
@@ -152,22 +136,17 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _createPaymentAuthorizationAndLaunch(context),
-        icon: Icon(Icons.payment),
-        label: Text(localizations.payFabLabel),
+        onPressed: () => showToast(ProxyLocalizations.of(context).notYetImplemented),
+        icon: Icon(Icons.add),
+        label: Text(localizations.authorizeFabLabel),
       ),
       bottomNavigationBar: navigationBar(
         context,
-        HomePage.ProxyAccountsPage,
+        HomePage.AppAuthorizationsPage,
         busy: loading,
         changeHomePage: changeHomePage,
       ),
     );
-  }
-
-  Future<void> _createPaymentAuthorizationAndLaunch(BuildContext context) async {
-    final paymentAuthorization = await createPaymentAuthorization(context);
-    await launchPaymentAuthorization(context, paymentAuthorization);
   }
 
   Widget _accounts(
@@ -181,7 +160,7 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
         physics: ClampingScrollPhysics(),
         children: [
           const SizedBox(height: 4.0),
-          enticementCard(context, EnticementFactory.noProxyAccounts, cancellable: false),
+          enticementCard(context, EnticementFactory.noAuthorizations, cancellable: false),
         ],
       );
     }
@@ -228,46 +207,15 @@ class _ProxyAccountsPageState extends LoadingSupportState<ProxyAccountsPage>
           caption: localizations.deposit,
           color: Colors.blue,
           icon: Icons.file_download,
-          onTap: () => depositToAccount(context, account),
-        ),
-        new IconSlideAction(
-          caption: 'Withdraw',
-          color: Colors.indigo,
-          icon: Icons.file_upload,
-          onTap: () => withdrawFromAccount(context, account),
+          onTap: () => print("No Action"),
         ),
       ],
-      secondaryActions: <Widget>[
-        new IconSlideAction(
-          caption: localizations.refreshButtonHint,
-          color: Colors.orange,
-          icon: Icons.refresh,
-          onTap: () => refreshAccount(context, account),
-        ),
-        new IconSlideAction(
-          caption: localizations.archive,
-          color: Colors.red,
-          icon: Icons.archive,
-          onTap: () => archiveAccount(context, account),
-        ),
-      ],
-    );
-  }
-
-  void _launchContacts(BuildContext context) {
-    Navigator.push(
-      context,
-      new MaterialPageRoute(
-        builder: (context) => ContactsPage.manage(appConfiguration: widget.appConfiguration),
-      ),
     );
   }
 
   void _onAction(BuildContext context, ActionMenuItem action) {
     if (action.action == DEPOSIT) {
-      createAccountAndDeposit(context);
-    } else if (action.action == CONTACTS) {
-      _launchContacts(context);
+      print("no action");
     } else {
       print("Unknown action $action");
     }

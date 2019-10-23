@@ -8,9 +8,6 @@ import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/identity/model/deposit_event.dart';
 import 'package:proxy_id/identity/model/event_entity.dart';
-import 'package:proxy_id/identity/model/payment_authorization_event.dart';
-import 'package:proxy_id/identity/model/payment_encashment_event.dart';
-import 'package:proxy_id/identity/model/withdrawal_event.dart';
 
 class EventStore with ProxyUtils, FirestoreUtils {
   final AppConfiguration appConfiguration;
@@ -86,12 +83,6 @@ class EventStore with ProxyUtils, FirestoreUtils {
     switch (json["eventType"]) {
       case 'Deposit':
         return DepositEvent.fromJson(json);
-      case 'Withdrawal':
-        return WithdrawalEvent.fromJson(json);
-      case 'PaymentAuthorization':
-        return PaymentAuthorizationEvent.fromJson(json);
-      case 'PaymentEncashment':
-        return PaymentEncashmentEvent.fromJson(json);
       default:
         return null;
     }
