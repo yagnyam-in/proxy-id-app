@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:proxy_core/core.dart';
 import 'package:proxy_core/services.dart';
 import 'package:proxy_id/config/app_configuration.dart';
-import 'package:proxy_id/identity/db/proxy_account_store.dart';
+import 'package:proxy_id/identity/db/proxy_subject_store.dart';
 import 'package:proxy_id/services/service_helper.dart';
 import 'package:proxy_id/url_config.dart';
 import 'package:uuid/uuid.dart';
@@ -15,7 +15,7 @@ class IdentityService with ProxyUtils, HttpClientUtils, ServiceHelper, DebugUtil
   final HttpClientFactory httpClientFactory;
   final MessageFactory messageFactory;
   final MessageSigningService messageSigningService;
-  final ProxyAccountStore _proxyAccountStore;
+  final ProxySubjectStore _proxySubjectStore;
 
   IdentityService(
     this.appConfiguration, {
@@ -23,9 +23,9 @@ class IdentityService with ProxyUtils, HttpClientUtils, ServiceHelper, DebugUtil
     HttpClientFactory httpClientFactory,
     @required this.messageFactory,
     @required this.messageSigningService,
-  })  : proxyBankingUrl = proxyBankingUrl ?? "${UrlConfig.PROXY_BANKING}/api",
+  })  : proxyBankingUrl = proxyBankingUrl ?? "${UrlConfig.PROXY_IDENTITY}/api",
         httpClientFactory = httpClientFactory ?? ProxyHttpClient.client,
-        _proxyAccountStore = ProxyAccountStore(appConfiguration) {
+        _proxySubjectStore = ProxySubjectStore(appConfiguration) {
     assert(appConfiguration != null);
     assert(isNotEmpty(this.proxyBankingUrl));
   }

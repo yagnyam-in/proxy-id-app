@@ -8,7 +8,7 @@ import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/device_entity.dart';
 
-class DeviceStore with ProxyUtils, FirestoreUtils {
+class DeviceStore with ProxyUtils {
   final AppConfiguration appConfiguration;
   final DocumentReference root;
 
@@ -31,7 +31,7 @@ class DeviceStore with ProxyUtils, FirestoreUtils {
     DeviceEntity updatedDevice;
     if (existingDevice != null && existingDevice.fcmToken == fcmToken) {
       final Set<ProxyId> existingProxies = existingDevice.proxyIdList;
-      final List<ProxyId> newProxies = proxyKeys.map((key) => key.id).toList();
+      final Set<ProxyId> newProxies = proxyKeys.map((key) => key.id).toSet();
       updatedDevice = DeviceEntity(
         deviceId: deviceId,
         fcmToken: fcmToken,

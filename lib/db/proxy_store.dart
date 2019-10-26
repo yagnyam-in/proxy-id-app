@@ -6,7 +6,7 @@ import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/account_entity.dart';
 import 'package:proxy_id/model/proxy_entity.dart';
 
-class ProxyStore with ProxyUtils, FirestoreUtils {
+class ProxyStore with ProxyUtils {
   final AccountEntity account;
   final DocumentReference _root;
 

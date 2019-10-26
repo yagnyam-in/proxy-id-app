@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/identity/model/deposit_entity.dart';
-import 'package:proxy_id/identity/model/proxy_account_entity.dart';
+import 'package:proxy_id/identity/model/proxy_subject_entity.dart';
 import 'package:proxy_id/model/enticement.dart';
 import 'package:proxy_id/services/enticement_service.dart';
 
@@ -11,10 +11,10 @@ class CleanupService {
 
   CleanupService(this._appConfiguration);
 
-  Future<void> onProxyAccount(ProxyAccountEntity proxyAccount) async {
-    if (proxyAccount != null) {
+  Future<void> onProxySubject(ProxySubjectEntity proxySubject) async {
+    if (proxySubject != null) {
       return dismissEnticementById(
-        proxyUniverse: proxyAccount.proxyUniverse,
+        proxyUniverse: proxySubject.proxyUniverse,
         enticementId: Enticement.NO_AUTHORIZATIONS,
       );
     }

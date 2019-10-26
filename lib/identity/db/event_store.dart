@@ -9,16 +9,15 @@ import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/identity/model/deposit_event.dart';
 import 'package:proxy_id/identity/model/event_entity.dart';
 
-class EventStore with ProxyUtils, FirestoreUtils {
+class EventStore with ProxyUtils {
   final AppConfiguration appConfiguration;
-  final DocumentReference root;
 
-  EventStore(this.appConfiguration) : root = FirestoreUtils.accountRootRef(appConfiguration.accountId);
+  EventStore(this.appConfiguration);
 
   CollectionReference eventsRef({
     @required String proxyUniverse,
   }) {
-    return root.collection(FirestoreUtils.PROXY_UNIVERSE_NODE).document(proxyUniverse).collection('events');
+    return FirestoreUtils.accountRootRef(appConfiguration.accountId, proxyUniverse: proxyUniverse).collection('events');
   }
 
   DocumentReference _ref({

@@ -6,16 +6,13 @@ import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/dismissed_enticement_entity.dart';
 
-class DismissedEnticementStore with ProxyUtils, FirestoreUtils {
+class DismissedEnticementStore with ProxyUtils {
   final AppConfiguration appConfiguration;
-  final DocumentReference root;
 
-  DismissedEnticementStore(this.appConfiguration) : root = FirestoreUtils.accountRootRef(appConfiguration.accountId);
+  DismissedEnticementStore(this.appConfiguration);
 
   CollectionReference enticementsRef() {
-    return root
-        .collection(FirestoreUtils.PROXY_UNIVERSE_NODE)
-        .document(appConfiguration.proxyUniverse)
+    return FirestoreUtils.accountRootRef(appConfiguration.accountId, proxyUniverse: appConfiguration.proxyUniverse)
         .collection('dismissed-enticements');
   }
 
@@ -25,12 +22,12 @@ class DismissedEnticementStore with ProxyUtils, FirestoreUtils {
 
   Stream<List<DismissedEnticementEntity>> subscribeForEnticements() {
     print("Subscribing for dismissed enticements");
-    return enticementsRef().snapshots().map(_querySnapshotToEntitys);
+    return enticementsRef().snapshots().map(_querySnapshotToEntities);
   }
 
   Future<List<DismissedEnticementEntity>> fetchEnticements() async {
     print("Fetching all dismissed enticements");
-    return _querySnapshotToEntitys(await enticementsRef().getDocuments());
+    return _querySnapshotToEntities(await enticementsRef().getDocuments());
   }
 
   DismissedEnticementEntity _documentSnapshotToEntity(DocumentSnapshot snapshot) {
@@ -41,7 +38,7 @@ class DismissedEnticementStore with ProxyUtils, FirestoreUtils {
     }
   }
 
-  List<DismissedEnticementEntity> _querySnapshotToEntitys(QuerySnapshot snapshot) {
+  List<DismissedEnticementEntity> _querySnapshotToEntities(QuerySnapshot snapshot) {
     if (snapshot.documents != null) {
       return snapshot.documents.map(_documentSnapshotToEntity).where((a) => a != null).toList();
     } else {

@@ -4,7 +4,7 @@ import 'package:proxy_id/settings_page.dart';
 
 import 'home_page_navigation.dart';
 import 'identity/events_page.dart';
-import 'identity/app_authorizations_page.dart';
+import 'identity/proxy_subjects_page.dart';
 
 class IdentityHome extends StatefulWidget {
   final AppConfiguration appConfiguration;
@@ -20,15 +20,15 @@ class IdentityHome extends StatefulWidget {
 class _IdentityHomeState extends State<IdentityHome> {
   final AppConfiguration appConfiguration;
 
-  HomePage _homePage = HomePage.AppAuthorizationsPage;
+  HomePage _homePage = HomePage.ProxySubjectsPage;
 
   _IdentityHomeState(this.appConfiguration);
 
   @override
   Widget build(BuildContext context) {
     switch (_homePage) {
-      case HomePage.AppAuthorizationsPage:
-        return AppAuthorizationsPage(
+      case HomePage.ProxySubjectsPage:
+        return ProxySubjectsPage(
           appConfiguration,
           changeHomePage: changeHomePage,
         );
@@ -43,7 +43,7 @@ class _IdentityHomeState extends State<IdentityHome> {
           changeHomePage: changeHomePage,
         );
       default:
-        return AppAuthorizationsPage(
+        return ProxySubjectsPage(
           appConfiguration,
           changeHomePage: changeHomePage,
         );

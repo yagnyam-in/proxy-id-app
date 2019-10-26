@@ -184,38 +184,6 @@ class ProxyLocalizations {
     );
   }
 
-  String get bankingTitle {
-    return Intl.message(
-      'Banking',
-      name: 'bankingTitle',
-      desc: 'Banking',
-    );
-  }
-
-  String get deposit {
-    return Intl.message(
-      'Deposit',
-      name: 'deposit',
-      desc: 'Load Money',
-    );
-  }
-
-  String get payment {
-    return Intl.message(
-      'Pay',
-      name: 'payment',
-      desc: 'Make Payment',
-    );
-  }
-
-  String get withdraw {
-    return Intl.message(
-      'Withdraw',
-      name: 'withdraw',
-      desc: 'Withdraw from Wallet',
-    );
-  }
-
   String get archive {
     return Intl.message(
       'Archive',
@@ -224,54 +192,18 @@ class ProxyLocalizations {
     );
   }
 
-  String get startBankingTitle {
+  String get errorLoadingSubjects {
     return Intl.message(
-      'Start Banking',
-      name: 'startBankingTitle',
-      desc: 'Start Banking',
+      'Failed to fetch existing subjects',
+      name: 'errorLoadingSubjects',
+      desc: 'Failed to fetch existing subjects',
     );
   }
 
-  String get startBankingDescription {
-    return Intl.message(
-      'Start making payments anonymously',
-      name: 'startBankingDescription',
-      desc: 'Start Banking description',
-    );
-  }
-
-  String get addBunqAccountTitle {
-    return Intl.message(
-      'Add Bunq account',
-      name: 'setupBunqAccountTitle',
-      desc: 'Add Bunq account',
-    );
-  }
-
-  String get addBunqAccountDescription {
-    return Intl.message(
-      'By Adding your Bunq account, you can directly start using it anonymously',
-      name: 'setupBunqAccountDescription',
-      desc: 'By Adding your Bunq account, you can directly start using it anonymously',
-    );
-  }
-
-  String get addFundsTitle => Intl.message('Add Funds');
-
-  String get addFundsDescription => Intl.message('By already adding funds, you can make Payments faster');
-
-  String get errorLoadingAccounts {
-    return Intl.message(
-      'Failed to fetch existing accounts',
-      name: 'errorLoadingAccounts',
-      desc: 'Failed to fetch existing accounts',
-    );
-  }
-
-  String creatingAnonymousAccount(String currency) {
+  String creatingAnonymousSubject(String currency) {
     return Intl.message(
       'Creating Anonymous $currency Account',
-      name: 'creatingAccount',
+      name: 'creatingAnonymousSubject',
       args: [currency],
       desc: 'Creating Anonymous Account for given Currency',
       examples: {
@@ -994,6 +926,10 @@ class ProxyLocalizations {
   String get makePaymentDescription =>
       Intl.message("Its very easy to make Payment, you don't need to know any account details to make payment");
 
+  String get proxySubjectsPageTitle => Intl.message('Identity');
+
+  String get proxySubjectsPageNavigationLabel => Intl.message('Identity');
+
   String get appAuthorizationsPageTitle => Intl.message('Authorizations');
 
   String get authorizePhoneNumber => Intl.message('Verify Phone');
@@ -1084,7 +1020,7 @@ class ProxyLocalizations {
 
   String get appWelcomeSubTitle => Intl.message('protect your identity');
 
-  String get chooseProxyAccountPageTitle => Intl.message('Choose Account');
+  String get chooseProxySubjectPageTitle => Intl.message('Choose Subject');
 
   String get depositActionItemTitle => Intl.message('Add Funds');
 

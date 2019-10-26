@@ -17,33 +17,33 @@ import 'package:proxy_id/widgets/enticement_helper.dart';
 import 'package:proxy_id/widgets/loading.dart';
 import 'package:uuid/uuid.dart';
 
-import 'db/proxy_account_store.dart';
-import 'model/proxy_account_entity.dart';
 import 'app_authorizations_helper.dart';
-import 'widgets/account_card.dart';
+import 'db/proxy_subject_store.dart';
+import 'model/proxy_subject_entity.dart';
+import 'widgets/proxy_subject_card.dart';
 
 final Uuid uuidFactory = Uuid();
 
-class AppAuthorizationsPage extends StatefulWidget {
+class ProxySubjectsPage extends StatefulWidget {
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
 
-  AppAuthorizationsPage(
+  ProxySubjectsPage(
     this.appConfiguration, {
     Key key,
     @required this.changeHomePage,
   }) : super(key: key) {
-    print("Constructing ProxyAccountsPage");
+    print("Constructing ProxySubjectsPage");
     assert(appConfiguration != null);
   }
 
   @override
-  _AppAuthorizationsPageState createState() {
-    return _AppAuthorizationsPageState(appConfiguration, changeHomePage);
+  _ProxySubjectsPageState createState() {
+    return _ProxySubjectsPageState(appConfiguration, changeHomePage);
   }
 }
 
-class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsPage>
+class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
     with ProxyUtils, EnticementHelper, HomePageNavigation, AppAuthorizationsHelper, UpgradeHelper {
   static const String DEPOSIT = "deposit";
   final AppConfiguration appConfiguration;
@@ -51,17 +51,17 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Stream<List<ProxyAccountEntity>> _proxyAccountsStream;
+  Stream<List<ProxySubjectEntity>> _proxySubjectsStream;
   Stream<List<Enticement>> _enticementsStream;
   bool loading = false;
   Timer _newVersionCheckTimer;
 
-  _AppAuthorizationsPageState(this.appConfiguration, this.changeHomePage);
+  _ProxySubjectsPageState(this.appConfiguration, this.changeHomePage);
 
   @override
   void initState() {
     super.initState();
-    _proxyAccountsStream = ProxyAccountStore(appConfiguration).subscribeForAccounts();
+    _proxySubjectsStream = ProxySubjectStore(appConfiguration).subscribeForSubjects();
     _enticementsStream = EnticementService(appConfiguration).subscribeForFirstEnticement();
     ServiceFactory.bootService().warmUpBackends();
     _newVersionCheckTimer = Timer(const Duration(milliseconds: 5000), () => checkForUpdates(context));
@@ -98,7 +98,7 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(localizations.appAuthorizationsPageTitle + appConfiguration.proxyUniverseSuffix),
+        title: Text(localizations.proxySubjectsPageTitle + appConfiguration.proxyUniverseSuffix),
         actions: <Widget>[
           PopupMenuButton<ActionMenuItem>(
             onSelected: (action) => _onAction(context, action),
@@ -120,9 +120,9 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
           itemBuilder: (context, index) {
             if (index == 0) {
               return streamBuilder(
-                name: "Account Loading",
-                stream: _proxyAccountsStream,
-                builder: (context, accounts) => _accounts(context, accounts),
+                name: "Subject Loading",
+                stream: _proxySubjectsStream,
+                builder: (context, subjects) => _subjects(context, subjects),
               );
             } else {
               return streamBuilder(
@@ -142,19 +142,19 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
       ),
       bottomNavigationBar: navigationBar(
         context,
-        HomePage.AppAuthorizationsPage,
+        HomePage.ProxySubjectsPage,
         busy: loading,
         changeHomePage: changeHomePage,
       ),
     );
   }
 
-  Widget _accounts(
+  Widget _subjects(
     BuildContext context,
-    List<ProxyAccountEntity> accounts,
+    List<ProxySubjectEntity> subjects,
   ) {
-    // print("accounts : $accounts");
-    if (accounts.isEmpty) {
+    // print("subjects : $subjects");
+    if (subjects.isEmpty) {
       return ListView(
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
@@ -167,10 +167,10 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
     return ListView(
       shrinkWrap: true,
       physics: ClampingScrollPhysics(),
-      children: accounts.expand((account) {
+      children: subjects.expand((subject) {
         return [
           const SizedBox(height: 4.0),
-          _accountCard(context, account),
+          _subjectCard(context, subject),
         ];
       }).toList(),
     );
@@ -193,23 +193,14 @@ class _AppAuthorizationsPageState extends LoadingSupportState<AppAuthorizationsP
     );
   }
 
-  Widget _accountCard(
+  Widget _subjectCard(
     BuildContext context,
-    ProxyAccountEntity account,
+    ProxySubjectEntity subject,
   ) {
-    ProxyLocalizations localizations = ProxyLocalizations.of(context);
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
-      child: AccountCard(account: account),
-      actions: <Widget>[
-        new IconSlideAction(
-          caption: localizations.deposit,
-          color: Colors.blue,
-          icon: Icons.file_download,
-          onTap: () => print("No Action"),
-        ),
-      ],
+      child: ProxySubjectCard(subject: subject),
     );
   }
 

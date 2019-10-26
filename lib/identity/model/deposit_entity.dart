@@ -101,18 +101,6 @@ class DepositEntity with ProxyUtils {
 
   static String statusAsText(ProxyLocalizations localizations, DepositStatusEnum status) {
     switch (status) {
-      case DepositStatusEnum.Created:
-        return localizations.created;
-      case DepositStatusEnum.Registered:
-        return localizations.waitingForFunds;
-      case DepositStatusEnum.Rejected:
-        return localizations.rejected;
-      case DepositStatusEnum.InProcess:
-        return localizations.inProcess;
-      case DepositStatusEnum.Completed:
-        return localizations.deposited;
-      case DepositStatusEnum.Cancelled:
-        return localizations.cancelled;
       default:
         print("Unhandled Event state: $status");
         return localizations.inProcess;

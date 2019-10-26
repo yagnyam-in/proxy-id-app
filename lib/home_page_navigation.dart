@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:proxy_id/localizations.dart';
 
 enum HomePage {
-  AppAuthorizationsPage,
+  ProxySubjectsPage,
   EventsPage,
   SettingsPage,
 }
@@ -32,7 +32,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
 
   _BottomNavigationBarState(this.changeHomePage, this.homePage, this.busy) {
     switch (homePage) {
-      case HomePage.AppAuthorizationsPage:
+      case HomePage.ProxySubjectsPage:
         _selectedIndex = 0;
         break;
       case HomePage.EventsPage:
@@ -54,7 +54,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
     });
     switch (_selectedIndex) {
       case 0:
-        changeHomePage(HomePage.AppAuthorizationsPage);
+        changeHomePage(HomePage.ProxySubjectsPage);
         break;
       case 1:
         changeHomePage(HomePage.EventsPage);
@@ -64,7 +64,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
         break;
       default:
         print("HomePage for $_selectedIndex is not handled");
-        changeHomePage(HomePage.AppAuthorizationsPage);
+        changeHomePage(HomePage.ProxySubjectsPage);
         break;
     }
   }
@@ -77,7 +77,7 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.fingerprint),
-          title: Text(localizations.authorizationsPageNavigationLabel),
+          title: Text(localizations.proxySubjectsPageNavigationLabel),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.event),

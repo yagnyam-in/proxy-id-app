@@ -5,13 +5,14 @@ import 'package:proxy_core/core.dart';
 import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/account_entity.dart';
 
-class AccountStore with ProxyUtils, FirestoreUtils {
+class AccountStore with ProxyUtils {
   DocumentReference _ref(String accountId) {
     return FirestoreUtils.accountRootRef(accountId);
   }
 
   AccountEntity _documentSnapshotToAccountEntity(DocumentSnapshot snapshot) {
     if (snapshot.exists) {
+      print(snapshot.data);
       return AccountEntity.fromJson(snapshot.data);
     }
     return null;
@@ -21,8 +22,8 @@ class AccountStore with ProxyUtils, FirestoreUtils {
     try {
       DocumentSnapshot snapshot = await _ref(accountId).get();
       return _documentSnapshotToAccountEntity(snapshot);
-    } catch (e) {
-      print("Error accessing $accountId: $e");
+    } catch (e, st) {
+      print("Error accessing $accountId: $e => $st");
       return null;
     }
   }

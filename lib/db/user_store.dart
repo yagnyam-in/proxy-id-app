@@ -6,7 +6,7 @@ import 'package:proxy_core/core.dart';
 import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/user_entity.dart';
 
-class UserStore with ProxyUtils, FirestoreUtils {
+class UserStore with ProxyUtils {
   final DocumentReference root;
 
   UserStore.forUser(FirebaseUser firebaseUser) : root = FirestoreUtils.userRootRef(firebaseUser.uid);

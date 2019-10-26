@@ -8,7 +8,7 @@ import 'package:proxy_id/db/firestore_utils.dart';
 import 'package:proxy_id/model/account_entity.dart';
 import 'package:proxy_id/model/proxy_key_entity.dart';
 
-class ProxyKeyStore with ProxyUtils, FirestoreUtils {
+class ProxyKeyStore with ProxyUtils {
   final AccountEntity account;
   final String passPhrase;
   final SymmetricKeyEncryptionService encryptionService = SymmetricKeyEncryptionService();

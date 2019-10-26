@@ -12,24 +12,20 @@ import 'package:proxy_id/identity/model/deposit_event.dart';
 import 'cleanup_service.dart';
 import 'event_store.dart';
 
-class DepositStore with ProxyUtils, FirestoreUtils {
+class DepositStore with ProxyUtils {
   final AppConfiguration appConfiguration;
-  final DocumentReference root;
   final EventStore _eventStore;
   final CleanupService _cleanupService;
 
   DepositStore(this.appConfiguration)
-      : root = FirestoreUtils.accountRootRef(appConfiguration.accountId),
-        _eventStore = EventStore(appConfiguration),
+      : _eventStore = EventStore(appConfiguration),
         _cleanupService = CleanupService(appConfiguration);
 
   DocumentReference _ref({
     @required String proxyUniverse,
     @required String depositId,
   }) {
-    return root
-        .collection(FirestoreUtils.PROXY_UNIVERSE_NODE)
-        .document(proxyUniverse)
+    return FirestoreUtils.accountRootRef(appConfiguration.accountId, proxyUniverse: proxyUniverse)
         .collection('deposits')
         .document(depositId);
   }

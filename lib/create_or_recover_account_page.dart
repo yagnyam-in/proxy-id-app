@@ -79,21 +79,20 @@ class _CreateOrRecoverAccountState extends LoadingSupportState<CreateOrRecoverAc
       body: BusyChildWidget(
         loading: loading,
         child: Center(
-          child: _createOrRecoverAccount(context),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                _welcomeHeader(context),
+                _loginButtons(context),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _createOrRecoverAccount(BuildContext context) => SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            _welcomeHeader(context),
-            _loginButtons(context),
-          ],
-        ),
-      );
 
   Widget _welcomeHeader(BuildContext context) {
     ProxyLocalizations localizations = ProxyLocalizations.of(context);
@@ -140,8 +139,7 @@ class _CreateOrRecoverAccountState extends LoadingSupportState<CreateOrRecoverAc
                 labelText: localizations.passPhrase,
                 helperText: localizations.passPhraseHint,
               ),
-              keyboardType: TextInputType.text,
-              // TODO: Change to Visible Password Type
+              keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (val) => FocusScope.of(context).requestFocus(actionButtonFocusNode),
               validator: (value) => _passphraseIdValidator(localizations, value),
