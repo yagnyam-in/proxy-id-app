@@ -58,7 +58,7 @@ class AppConfigurationBloc {
     AccountEntity account;
     String passPhrase = await AppConfiguration.fetchPassPhrase();
     // To prompt Proxy Universe, don't default proxyUniverse
-    String proxyUniverse = await AppConfiguration.fetchProxyUniverse() ?? ProxyUniverse.PRODUCTION;
+    String proxyUniverse = await AppConfiguration.fetchProxyUniverse() ?? ProxyUniverse.TEST;
     String deviceId = await AppConfiguration.fetchDeviceId();
     if (firebaseUser != null) {
       appUser = await UserStore.forUser(firebaseUser).fetchUser();

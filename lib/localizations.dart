@@ -220,14 +220,6 @@ class ProxyLocalizations {
     );
   }
 
-  String get depositRequestInputTitle {
-    return Intl.message(
-      'Deposit Details',
-      name: 'depositRequestInputTitle',
-      desc: 'Dialog title to deposit',
-    );
-  }
-
   String get paymentAuthorizationInputTitle {
     return Intl.message(
       'Payment Details',
@@ -536,26 +528,6 @@ class ProxyLocalizations {
     );
   }
 
-  String get depositEventTitle {
-    return Intl.message(
-      'Deposit',
-      name: 'depositEventTitle',
-      desc: 'deposit event title',
-    );
-  }
-
-  String depositEventSubTitle(String destinationAccount) {
-    return Intl.message(
-      'Account: $destinationAccount',
-      name: 'depositEventSubTitle',
-      args: [destinationAccount],
-      desc: 'Depositing to Account',
-      examples: {
-        'destinationAccount': 'abcd-defghij',
-      },
-    );
-  }
-
   String get registered => Intl.message(
         'Registered',
         name: 'registered',
@@ -848,20 +820,12 @@ class ProxyLocalizations {
         desc: 'Invalid Secret',
       );
 
-  String get depositNotFound => Intl.message(
-        'Deposit not found',
-        name: 'depositNotFound',
-        desc: 'Deposit not found',
-      );
-
   String amountDisplayMessage({double value, String currency}) => Intl.message(
         '$value $currency',
         name: 'amountDisplayMessage',
         args: [value, currency],
         desc: 'Amount as String',
       );
-
-  String get shareDeposit => Intl.message('Share');
 
   String get loginPageTitle => Intl.message('Login');
 
@@ -964,6 +928,8 @@ class ProxyLocalizations {
 
   String get authorizeFabLabel => Intl.message('Authorize');
 
+  String get verifyFabLabel => Intl.message('Verify');
+
   String get unexpectedError => Intl.message('Unexpected Error');
 
   String get retry => Intl.message('Retry');
@@ -973,8 +939,6 @@ class ProxyLocalizations {
   String get logout => Intl.message('Logout');
 
   String get createAndShareButtonLabel => Intl.message('Create & Share');
-
-  String get depositButtonLabel => Intl.message('Deposit');
 
   String get payees => Intl.message('Payees');
 
@@ -986,7 +950,7 @@ class ProxyLocalizations {
 
   String get cancelPaymentTooltip => Intl.message('Cancel Payment');
 
-  String get cancelDepositTooltip => Intl.message('Cancel Deposit');
+  String get cancelVerificationTooltip => Intl.message('Cancel');
 
   String get cancelNotPossible => Intl.message('Cancel not possible');
 
@@ -995,6 +959,10 @@ class ProxyLocalizations {
   String get paymentEncashmentEventTitle => Intl.message('Payment Received');
 
   String get copiedToClipboard => Intl.message('Copied to Clipboard');
+
+  String get verificationCode => Intl.message('Verification Code');
+
+  String get verifyActionItemTitle => Intl.message('Verify');
 
   String paymentEncashmentEventSubTitle(String payeeAccount) {
     return Intl.message(
@@ -1022,15 +990,20 @@ class ProxyLocalizations {
 
   String get chooseProxySubjectPageTitle => Intl.message('Choose Subject');
 
-  String get depositActionItemTitle => Intl.message('Add Funds');
+  String get noProxySubjectsTitle => Intl.message('No Identity');
+
+  String get noProxySubjectsDescription =>
+      Intl.message('You have not verified your Identity. Once you verify, it will appear here.');
 
   String get noAppAuthorizationsTitle => Intl.message('No App Authorizations');
 
-  String get noAppAuthorizationsDescription => Intl.message('You have not authorized any Apps. Once you authorize Apps, they will appear here.');
+  String get noAppAuthorizationsDescription =>
+      Intl.message('You have not authorized any Apps. Once you authorize Apps, they will appear here.');
 
   String get noEventsTitle => Intl.message('No Events found');
 
-  String get noEventsDescription => Intl.message('No Activity found. Once you authorize Apps, your activity will appear here.');
+  String get noEventsDescription =>
+      Intl.message('No Activity found. Once you authorize Apps, your activity will appear here.');
 
   String get setupPassPhraseButtonLabel => Intl.message('Setup');
 
@@ -1112,8 +1085,6 @@ class ProxyLocalizations {
 
   String get notVerified => Intl.message('Not Verified');
 
-  String get verifyFabLabel => Intl.message('Verify');
-
   String get emailOrPhoneNumber => Intl.message('Email or Phone Number');
 
   String get signInDialogTitle => Intl.message("SignIn");
@@ -1153,8 +1124,6 @@ class ProxyLocalizations {
 
   String get invalidInputsForEncashment => Intl.message('Not all mandatory fields are entered');
 
-  String get deposited => Intl.message('Deposited');
-
   String get paymentEncashedStatus => Intl.message('Received');
 
   String get verificationInProgress => Intl.message('Verification in progress');
@@ -1172,6 +1141,26 @@ class ProxyLocalizations {
   String get iosAppStoreName => Intl.message('AppStore');
 
   String get unsupportedPlatform => Intl.message("Last time we checked, we don't support this platform yet.");
+
+  String get aadhaarNumber => Intl.message('Aadhaar');
+
+  String get subjectInputTitle => Intl.message('Identity');
+
+  String get unknownIdentity => Intl.message('Unknown Identity');
+
+  String get subjectAlreadyVerified => Intl.message('Already verified');
+
+  String get verifySubjectTitle => Intl.message('Verify');
+
+  String get deleteSubjectMenuItem => Intl.message('Delete');
+
+  String get proxySubjectTitle => Intl.message('Identity');
+
+  String get subjectName => Intl.message('Name');
+
+  String get deleteNotPossible => Intl.message('Delete not possible');
+
+  String get dateOfBirth => Intl.message('Date of Birth');
 
   String upgradeOnStore(String storeName) {
     return Intl.message(

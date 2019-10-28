@@ -8,8 +8,11 @@ part 'service_provider_entity.g.dart';
 @JsonSerializable()
 class ServiceProviderEntity with ProxyUtils {
   static const PROXY_UNIVERSE = 'proxyUniverse';
-  static const SERVICE_PROVIDER_ID = 'serviceProviderId';
-  static const SERVICE_PROVIDER_SHA256_THUMBPRINT = 'serviceProviderSha256Thumbprint';
+  static const SERVICE_PROVIDER_ID = 'serviceProviderProxyId.id';
+  static const SERVICE_PROVIDER_SHA256_THUMBPRINT = 'serviceProviderProxyId.sha256Thumbprint';
+
+  @JsonKey(nullable: false)
+  final String id;
 
   @JsonKey(name: PROXY_UNIVERSE, nullable: false)
   final String proxyUniverse;
@@ -18,28 +21,18 @@ class ServiceProviderEntity with ProxyUtils {
   final ProxyId serviceProviderProxyId;
 
   @JsonKey(nullable: false)
-  final Set<String> supportedCurrencies;
-
-  @JsonKey(nullable: false)
   final String apiUrl;
-
-  @JsonKey(name: SERVICE_PROVIDER_ID, nullable: false)
-  final String serviceProviderId;
-
-  @JsonKey(name: SERVICE_PROVIDER_SHA256_THUMBPRINT, nullable: false)
-  final String serviceProviderSha256Thumbprint;
 
   @JsonKey(nullable: true)
   final String serviceProviderName;
 
   ServiceProviderEntity({
+    @required this.id,
     @required this.proxyUniverse,
     @required this.serviceProviderProxyId,
     @required this.serviceProviderName,
-    @required this.supportedCurrencies,
     @required this.apiUrl,
-  })  : serviceProviderId = serviceProviderProxyId.id,
-        serviceProviderSha256Thumbprint = serviceProviderProxyId.sha256Thumbprint;
+  });
 
   Map<String, dynamic> toJson() => _$ServiceProviderEntityToJson(this);
 

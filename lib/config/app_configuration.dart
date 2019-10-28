@@ -26,6 +26,7 @@ class AppConfiguration {
     if (proxyUniverse == ProxyUniverse.PRODUCTION) {
       return "";
     } else {
+      return "";
       return " [T]";
     }
   }

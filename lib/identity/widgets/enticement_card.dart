@@ -28,9 +28,7 @@ class EnticementCard extends StatelessWidget {
       elevation: 4.0,
       margin: new EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
       child: Container(
-        decoration: BoxDecoration(
-            // color: Color.fromRGBO(64, 75, 96, .9),
-            ),
+        decoration: BoxDecoration(),
         child: makeListTile(context),
       ),
     );

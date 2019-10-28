@@ -8,10 +8,6 @@ import 'package:proxy_id/identity_home.dart';
 import 'package:proxy_id/services/service_factory.dart';
 import 'package:uuid/uuid.dart';
 
-import 'identity/db/deposit_store.dart';
-import 'identity/deposit_page.dart';
-import 'identity/model/deposit_entity.dart';
-
 class HomePage extends StatefulWidget {
   final AppConfiguration appConfiguration;
 
@@ -59,34 +55,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _handleDynamicLinks(Uri link) async {
     if (link == null) return;
     print('link.path = ${link.path}');
-    if (link.path == '/actions/deposit-status') {
-      _depositStatus(link, link.queryParameters);
-    } else {
-      print('ignoring $link');
-    }
-  }
-
-  Future<void> _depositStatus(Uri link, Map<String, String> query) async {
-    print("Launching dialog to show deposit status $query");
-    String proxyUniverse = query['proxyUniverse'];
-    String depositId = query['depositId'];
-    DepositEntity deposit =
-        await DepositStore(appConfiguration).fetchDeposit(proxyUniverse: proxyUniverse, depositId: depositId);
-    if (deposit == null) {
-      print("Couldn't find deposit for $query");
-      return null;
-    }
-    await Navigator.push(
-      context,
-      new MaterialPageRoute(
-        builder: (context) => DepositPage(
-          appConfiguration,
-          proxyUniverse: proxyUniverse,
-          depositId: depositId,
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    print('ignoring $link');
   }
 
   @override

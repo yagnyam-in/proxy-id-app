@@ -5,6 +5,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:proxy_core/core.dart';
 import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/home_page_navigation.dart';
+import 'package:proxy_id/identity/db/pending_subject_store.dart';
+import 'package:proxy_id/identity/pending_subject_page.dart';
 import 'package:proxy_id/localizations.dart';
 import 'package:proxy_id/model/action_menu_item.dart';
 import 'package:proxy_id/model/enticement.dart';
@@ -17,9 +19,12 @@ import 'package:proxy_id/widgets/enticement_helper.dart';
 import 'package:proxy_id/widgets/loading.dart';
 import 'package:uuid/uuid.dart';
 
-import 'app_authorizations_helper.dart';
 import 'db/proxy_subject_store.dart';
+import 'model/pending_subject_entity.dart';
 import 'model/proxy_subject_entity.dart';
+import 'proxy_subject_page.dart';
+import 'proxy_subjects_helper.dart';
+import 'widgets/pending_subject_card.dart';
 import 'widgets/proxy_subject_card.dart';
 
 final Uuid uuidFactory = Uuid();
@@ -44,14 +49,15 @@ class ProxySubjectsPage extends StatefulWidget {
 }
 
 class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
-    with ProxyUtils, EnticementHelper, HomePageNavigation, AppAuthorizationsHelper, UpgradeHelper {
-  static const String DEPOSIT = "deposit";
+    with ProxyUtils, EnticementHelper, HomePageNavigation, ProxySubjectsHelper, UpgradeHelper {
+  static const String VERIFY = "verify";
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Stream<List<ProxySubjectEntity>> _proxySubjectsStream;
+  Stream<List<PendingSubjectEntity>> _pendingSubjectsStream;
   Stream<List<Enticement>> _enticementsStream;
   bool loading = false;
   Timer _newVersionCheckTimer;
@@ -62,6 +68,7 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
   void initState() {
     super.initState();
     _proxySubjectsStream = ProxySubjectStore(appConfiguration).subscribeForSubjects();
+    _pendingSubjectsStream = PendingSubjectStore(appConfiguration).subscribeForPendingSubjects();
     _enticementsStream = EnticementService(appConfiguration).subscribeForFirstEnticement();
     ServiceFactory.bootService().warmUpBackends();
     _newVersionCheckTimer = Timer(const Duration(milliseconds: 5000), () => checkForUpdates(context));
@@ -84,10 +91,10 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
     );
   }
 
-  List<ActionMenuItem> actions(BuildContext context) {
+  List<ActionMenuItem> _menuActions(BuildContext context) {
     ProxyLocalizations localizations = ProxyLocalizations.of(context);
     return [
-      ActionMenuItem(title: localizations.depositActionItemTitle, icon: Icons.file_download, action: DEPOSIT),
+      ActionMenuItem(title: localizations.verifyActionItemTitle, icon: Icons.add, action: VERIFY),
     ];
   }
 
@@ -103,7 +110,7 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
           PopupMenuButton<ActionMenuItem>(
             onSelected: (action) => _onAction(context, action),
             itemBuilder: (BuildContext context) {
-              return actions(context).map((ActionMenuItem choice) {
+              return _menuActions(context).map((ActionMenuItem choice) {
                 return PopupMenuItem<ActionMenuItem>(
                   value: choice,
                   child: Text(choice.title),
@@ -116,28 +123,35 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
       body: BusyChildWidget(
         loading: loading,
         child: ListView.builder(
-          itemCount: 2,
+          itemCount: 3,
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return streamBuilder(
-                name: "Subject Loading",
-                stream: _proxySubjectsStream,
-                builder: (context, subjects) => _subjects(context, subjects),
-              );
-            } else {
-              return streamBuilder(
-                name: "Enticement Loading",
-                stream: _enticementsStream,
-                loadingWidget: SizedBox.shrink(),
-                builder: (context, enticements) => _enticements(context, enticements),
-              );
+            switch (index) {
+              case 0:
+                return streamBuilder(
+                  name: "Subjects Loading",
+                  stream: _proxySubjectsStream,
+                  builder: (context, subjects) => _subjects(context, subjects),
+                );
+              case 1:
+                return streamBuilder(
+                  name: "Pending Subjects Loading",
+                  stream: _pendingSubjectsStream,
+                  loadingWidget: SizedBox.shrink(),
+                  builder: (context, enticements) => _pendingSubjects(context, enticements),
+                );
+              default:
+                return streamBuilder(
+                  name: "Enticement Loading",
+                  stream: _enticementsStream,
+                  loadingWidget: SizedBox.shrink(),
+                  builder: (context, enticements) => _enticements(context, enticements),
+                );
             }
           },
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => showToast(ProxyLocalizations.of(context).notYetImplemented),
-        icon: Icon(Icons.add),
+        onPressed: () => showToast(localizations.notYetImplemented),
         label: Text(localizations.authorizeFabLabel),
       ),
       bottomNavigationBar: navigationBar(
@@ -146,6 +160,22 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
         busy: loading,
         changeHomePage: changeHomePage,
       ),
+    );
+  }
+
+  Widget _pendingSubjects(
+    BuildContext context,
+    List<PendingSubjectEntity> pendingSubjects,
+  ) {
+    return ListView(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      children: pendingSubjects.expand((subject) {
+        return [
+          const SizedBox(height: 4.0),
+          _pendingSubjectCard(context, subject),
+        ];
+      }).toList(),
     );
   }
 
@@ -160,7 +190,7 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
         physics: ClampingScrollPhysics(),
         children: [
           const SizedBox(height: 4.0),
-          enticementCard(context, EnticementFactory.noAuthorizations, cancellable: false),
+          enticementCard(context, EnticementFactory.noProxySubjects, cancellable: false),
         ],
       );
     }
@@ -197,20 +227,89 @@ class _ProxySubjectsPageState extends LoadingSupportState<ProxySubjectsPage>
     BuildContext context,
     ProxySubjectEntity subject,
   ) {
+
     return Slidable(
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
-      child: ProxySubjectCard(subject: subject),
+      child: GestureDetector(
+        onTap: () => _launchSubject(context, subject),
+        child: ProxySubjectCard(subject: subject),
+      ),
+      secondaryActions: <Widget>[
+        new IconSlideAction(
+          caption: ProxyLocalizations.of(context).archive,
+          color: Colors.red,
+          icon: Icons.archive,
+          onTap: () => _archiveSubject(context, subject),
+        ),
+      ],
+    );
+  }
+
+  Widget _pendingSubjectCard(
+    BuildContext context,
+    PendingSubjectEntity subject,
+  ) {
+    return Slidable(
+      actionPane: SlidableDrawerActionPane(),
+      actionExtentRatio: 0.25,
+      child: PendingSubjectCard(
+        subject: subject,
+        verify: () => _verifyPendingSubject(context, subject),
+      ),
+      secondaryActions: <Widget>[
+        new IconSlideAction(
+          caption: ProxyLocalizations.of(context).archive,
+          color: Colors.red,
+          icon: Icons.archive,
+          onTap: () => _archivePendingSubject(context, subject),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _verifyPendingSubject(BuildContext context, PendingSubjectEntity pendingSubject) {
+    print("Launching $pendingSubject");
+    return Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => PendingSubjectPage(
+          appConfiguration,
+          pendingSubject: pendingSubject,
+        ),
+        fullscreenDialog: true,
+      ),
     );
   }
 
   void _onAction(BuildContext context, ActionMenuItem action) {
-    if (action.action == DEPOSIT) {
-      print("no action");
+    if (action.action == VERIFY) {
+      addProxySubject(context);
     } else {
       print("Unknown action $action");
     }
   }
+
+  Future<void> _launchSubject(BuildContext context, ProxySubjectEntity subject) {
+    return Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => ProxySubjectPage(
+          appConfiguration,
+          proxySubject: subject,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _archiveSubject(BuildContext context, ProxySubjectEntity subject) {
+    return ProxySubjectStore(appConfiguration).archiveSubject(subject);
+  }
+
+  Future<void> _archivePendingSubject(BuildContext context, PendingSubjectEntity subject) {
+    return PendingSubjectStore(appConfiguration).archivePendingSubject(subject);
+  }
+
 
   @override
   void showSnackBar(SnackBar snackbar) {

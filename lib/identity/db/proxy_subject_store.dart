@@ -87,6 +87,11 @@ class ProxySubjectStore with ProxyUtils {
     return subject;
   }
 
+  Future<void> archiveSubject(ProxySubjectEntity subject) async {
+    final ref = _ref(proxyUniverse: subject.proxyUniverse, subjectId: subject.subjectId.subjectId);
+    return ref.setData({ProxySubjectEntity.ACTIVE: false}, merge: true);
+  }
+
   Future<void> deleteSubject(ProxySubjectEntity subject) {
     return _ref(
       proxyUniverse: subject.proxyUniverse,

@@ -47,7 +47,7 @@ mixin ServiceHelper on ProxyUtils, HttpClientUtils {
       url,
       body: signedRequestJson,
     );
-    // print("Received $jsonResponse from $url");
+    print("Received $jsonResponse from $url");
     return ServiceFactory.messageFactory(appConfiguration).buildAndVerifySignedMessage(
       jsonResponse,
       responseParser,

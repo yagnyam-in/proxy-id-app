@@ -25,9 +25,7 @@ class Enticement {
     return "Enticement(id: $id)";
   }
 
-  static const String MAKE_PAYMENT = "make-payment";
-
   static const String NO_EVENTS = "no-events";
-  static const String NO_AUTHORIZATIONS = "no-proxy-accounts";
+  static const String NO_PROXY_SUBJECTS = "no-proxy-subjects";
 
 }

@@ -11,7 +11,7 @@ import 'package:uuid/uuid.dart';
 import 'db/event_store.dart';
 import 'events_helper.dart';
 import 'model/event_entity.dart';
-import 'app_authorizations_helper.dart';
+import 'proxy_subjects_helper.dart';
 import 'widgets/event_card.dart';
 
 final Uuid uuidFactory = Uuid();
@@ -32,7 +32,7 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends LoadingSupportState<EventsPage>
-    with HomePageNavigation, EnticementHelper, AppAuthorizationsHelper, EventsHelper {
+    with HomePageNavigation, EnticementHelper, ProxySubjectsHelper, EventsHelper {
   final AppConfiguration appConfiguration;
   final ChangeHomePage changeHomePage;
   bool loading = false;

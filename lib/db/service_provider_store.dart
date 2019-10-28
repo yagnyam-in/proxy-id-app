@@ -11,7 +11,7 @@ class ServiceProviderStore with ProxyUtils {
 
   ServiceProviderStore() : _root = Firestore.instance.collection('/service-providers');
 
-  Future<ServiceProviderEntity> fetchBank({
+  Future<ServiceProviderEntity> fetchServiceProvider({
     @required String proxyUniverse,
     ProxyId serviceProviderProxyId,
     String serviceProviderId,
@@ -27,6 +27,7 @@ class ServiceProviderStore with ProxyUtils {
     } else {
       throw ArgumentError("Either serviceProviderProxyId or serviceProviderId must be specified");
     }
+    print("Query: $query");
     return _querySnapshotToAccounts(await query.getDocuments()).first;
   }
 

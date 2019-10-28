@@ -10,6 +10,8 @@ mixin EnticementHelper {
 
   void showToast(String message);
 
+  Future<void> addProxySubject(BuildContext context);
+
   Widget enticementCard(BuildContext context, Enticement enticement, {bool cancellable = true}) {
     return EnticementCard(
       enticement: enticement,
@@ -30,9 +32,11 @@ mixin EnticementHelper {
   void launchEnticement(BuildContext context, Enticement enticement) {
     print("Launching $enticement");
     switch (enticement.id) {
-      case Enticement.NO_AUTHORIZATIONS:
+      case Enticement.NO_PROXY_SUBJECTS:
+        addProxySubject(context);
+        break;
       case Enticement.NO_EVENTS:
-      showToast(ProxyLocalizations.of(context).notYetImplemented);
+        showToast(ProxyLocalizations.of(context).notYetImplemented);
         break;
     }
   }

@@ -8,12 +8,11 @@ part of 'service_provider_entity.dart';
 
 ServiceProviderEntity _$ServiceProviderEntityFromJson(Map json) {
   return ServiceProviderEntity(
+    id: json['id'] as String,
     proxyUniverse: json['proxyUniverse'] as String,
     serviceProviderProxyId:
         ProxyId.fromJson(json['serviceProviderProxyId'] as Map),
     serviceProviderName: json['serviceProviderName'] as String,
-    supportedCurrencies:
-        (json['supportedCurrencies'] as List).map((e) => e as String).toSet(),
     apiUrl: json['apiUrl'] as String,
   );
 }
@@ -21,9 +20,9 @@ ServiceProviderEntity _$ServiceProviderEntityFromJson(Map json) {
 Map<String, dynamic> _$ServiceProviderEntityToJson(
     ServiceProviderEntity instance) {
   final val = <String, dynamic>{
+    'id': instance.id,
     'proxyUniverse': instance.proxyUniverse,
     'serviceProviderProxyId': instance.serviceProviderProxyId.toJson(),
-    'supportedCurrencies': instance.supportedCurrencies.toList(),
     'apiUrl': instance.apiUrl,
   };
 

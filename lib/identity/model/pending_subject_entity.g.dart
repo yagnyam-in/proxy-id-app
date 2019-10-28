@@ -1,30 +1,32 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'proxy_subject_entity.dart';
+part of 'pending_subject_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ProxySubjectEntity _$ProxySubjectEntityFromJson(Map json) {
-  return ProxySubjectEntity(
+PendingSubjectEntity _$PendingSubjectEntityFromJson(Map json) {
+  return PendingSubjectEntity(
     subjectIdType:
         _$enumDecode(_$SubjectIdTypeEnumEnumMap, json['subjectIdType']),
-    subjectId: ProxySubjectId.fromJson(json['subjectId'] as Map),
+    proxyUniverse: json['proxyUniverse'] as String,
     ownerProxyId: ProxyId.fromJson(json['ownerProxyId'] as Map),
     issuerProxyId: ProxyId.fromJson(json['issuerProxyId'] as Map),
-    subjectName: json['subjectName'] as String,
-    issuerName: json['issuerName'] as String,
-    signedProxySubject:
-        ProxySubject.signedMessageFromJson(json['signedProxySubject'] as Map),
+    signedAadhaarVerificationChallenge:
+        AadhaarVerificationChallenge.signedMessageFromJson(
+            json['signedAadhaarVerificationChallenge'] as Map),
     active: json['active'] as bool,
   );
 }
 
-Map<String, dynamic> _$ProxySubjectEntityToJson(ProxySubjectEntity instance) {
+Map<String, dynamic> _$PendingSubjectEntityToJson(
+    PendingSubjectEntity instance) {
   final val = <String, dynamic>{
     'subjectIdType': _$SubjectIdTypeEnumEnumMap[instance.subjectIdType],
-    'subjectId': instance.subjectId.toJson(),
+    'proxyUniverse': instance.proxyUniverse,
+    'ownerProxyId': instance.ownerProxyId.toJson(),
+    'issuerProxyId': instance.issuerProxyId.toJson(),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -33,11 +35,8 @@ Map<String, dynamic> _$ProxySubjectEntityToJson(ProxySubjectEntity instance) {
     }
   }
 
-  writeNotNull('subjectName', instance.subjectName);
-  writeNotNull('issuerName', instance.issuerName);
-  val['ownerProxyId'] = instance.ownerProxyId.toJson();
-  val['issuerProxyId'] = instance.issuerProxyId.toJson();
-  writeNotNull('signedProxySubject', instance.signedProxySubject?.toJson());
+  writeNotNull('signedAadhaarVerificationChallenge',
+      instance.signedAadhaarVerificationChallenge?.toJson());
   val['active'] = instance.active;
   return val;
 }

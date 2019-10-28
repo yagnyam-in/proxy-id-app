@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxy_id/config/app_configuration.dart';
 
-import 'deposit_page.dart';
-import 'model/deposit_event.dart';
 import 'model/event_entity.dart';
 
 mixin EventsHelper {
@@ -24,11 +22,8 @@ mixin EventsHelper {
   Widget _eventPage(EventEntity event) {
     switch (event.eventType) {
       case EventType.Deposit:
-        return DepositPage(
-          appConfiguration,
-          proxyUniverse: event.proxyUniverse,
-          depositId: (event as DepositEvent).depositId,
-        );
+        print("Not Handled");
+        return null;
       default:
         return null;
     }

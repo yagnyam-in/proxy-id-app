@@ -83,6 +83,10 @@ mixin LoginHelper {
       scopes: ['email'],
     );
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    if (googleUser == null) {
+      print("Failed to signin with Google");
+      return;
+    }
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,

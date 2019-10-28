@@ -94,11 +94,11 @@ class DepositEvent extends EventEntity with ProxyUtils {
   static DepositEvent fromJson(Map json) => _$DepositEventFromJson(json);
 
   String getTitle(ProxyLocalizations localizations) {
-    return localizations.depositEventTitle;
+    return "Title";
   }
 
   String getSubTitle(ProxyLocalizations localizations) {
-    return localizations.depositEventSubTitle(destinationProxyAccountId.accountId);
+    return "Subtitle";
   }
 
   String getAmountAsText(ProxyLocalizations localizations) {

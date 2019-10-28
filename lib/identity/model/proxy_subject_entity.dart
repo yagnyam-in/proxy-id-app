@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:proxy_core/core.dart';
-import 'package:proxy_messages/banking.dart';
 import 'package:proxy_messages/identity.dart';
 
 part 'proxy_subject_entity.g.dart';
@@ -9,7 +8,10 @@ part 'proxy_subject_entity.g.dart';
 @JsonSerializable()
 class ProxySubjectEntity with ProxyUtils {
   static const String ACTIVE = 'active';
-  static const String ID_OF_OWNER_PROXY_ID = 'idOfOwnerProxyId';
+  static const String ID_OF_OWNER_PROXY_ID = 'ownerProxyId.id';
+
+  @JsonKey(nullable: false)
+  final SubjectIdTypeEnum subjectIdType;
 
   @JsonKey(nullable: false)
   final ProxySubjectId subjectId;
@@ -23,50 +25,72 @@ class ProxySubjectEntity with ProxyUtils {
   @JsonKey(nullable: false)
   final ProxyId ownerProxyId;
 
-  @JsonKey(nullable: false, fromJson: ProxySubject.signedMessageFromJson)
+  @JsonKey(nullable: false)
+  final ProxyId issuerProxyId;
+
+  @JsonKey(nullable: true, fromJson: ProxySubject.signedMessageFromJson)
   final SignedMessage<ProxySubject> signedProxySubject;
 
   @JsonKey(name: ACTIVE, nullable: false)
   final bool active;
 
-  @JsonKey(name: ID_OF_OWNER_PROXY_ID, nullable: false)
-  final String idOfOwnerProxyId;
-
-  String get validName => isNotEmpty(subjectName) ? subjectName : subjectId.subjectId;
-
-  String get validIssuerName => isNotEmpty(issuerName) ? issuerName : subjectId.issuerId;
-
   String get proxyUniverse => subjectId.proxyUniverse;
 
+  SubjectDetails get subjectDetails => signedProxySubject?.message?.subjectDetails;
+
+  String get aadhaarNumber => subjectDetails?.aadhaarNumber;
+
+  String get formatterAadhaarNumber {
+    if (isNotEmpty(aadhaarNumber)) {
+      return "${aadhaarNumber.substring(0, 4)}-${aadhaarNumber.substring(4, 8)}-${aadhaarNumber.substring(8, 12)}";
+    }
+    return aadhaarNumber;
+  }
+
   ProxySubjectEntity({
+    @required this.subjectIdType,
     @required this.subjectId,
+    @required this.ownerProxyId,
+    @required this.issuerProxyId,
     @required this.subjectName,
     @required this.issuerName,
-    @required this.ownerProxyId,
-    @required this.signedProxySubject,
+    this.signedProxySubject,
     bool active,
-  })  : this.active = active ?? true,
-        this.idOfOwnerProxyId = ownerProxyId.id;
+  }) : this.active = active ?? true;
+
+  factory ProxySubjectEntity.fromProxySubject(SignedMessage<ProxySubject> signedProxySubject) {
+    return ProxySubjectEntity(
+      subjectIdType: SubjectIdTypeEnum.IN_AADHAAR,
+      subjectId: signedProxySubject.message.proxySubjectId,
+      ownerProxyId: signedProxySubject.message.ownerProxyId,
+      issuerProxyId: signedProxySubject.message.issuerProxyId,
+      subjectName: signedProxySubject.message.subjectDetails?.name,
+      issuerName: signedProxySubject.message.issuerProxyId.id,
+      signedProxySubject: signedProxySubject,
+      active: true,
+    );
+  }
 
   ProxySubjectEntity copy({
-    Amount balance,
     String subjectName,
     String issuerName,
     bool active,
   }) {
     return ProxySubjectEntity(
-      subjectId: this.subjectId,
+      subjectIdType: subjectIdType,
+      subjectId: subjectId,
+      ownerProxyId: ownerProxyId,
+      issuerProxyId: issuerProxyId,
+      signedProxySubject: signedProxySubject,
       subjectName: subjectName ?? this.subjectName,
       issuerName: issuerName ?? this.issuerName,
-      ownerProxyId: this.ownerProxyId,
-      signedProxySubject: this.signedProxySubject,
       active: active ?? this.active,
     );
   }
 
   @override
   String toString() {
-    return "ProxySubjectEntity(name: $validName, issuer: $validIssuerName, active: $active)";
+    return "ProxySubjectEntity(subject: ${subjectName ?? subjectId.subjectId}, issuer: ${issuerName ?? issuerProxyId.id}, active: $active)";
   }
 
   Map<String, dynamic> toJson() => _$ProxySubjectEntityToJson(this);

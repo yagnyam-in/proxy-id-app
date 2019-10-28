@@ -13,12 +13,12 @@ class EnticementFactory {
     return enticements.where((e) => e.proxyUniverses.contains(proxyUniverse)).toList();
   }
 
-  static Enticement get noAuthorizations {
+  static Enticement get noProxySubjects {
     return Enticement(
       proxyUniverses: Set.identity(),
-      id: Enticement.NO_AUTHORIZATIONS,
-      titleBuilder: (ProxyLocalizations localizations) => localizations.noAppAuthorizationsTitle,
-      descriptionBuilder: (ProxyLocalizations localizations) => localizations.noAppAuthorizationsDescription,
+      id: Enticement.NO_PROXY_SUBJECTS,
+      titleBuilder: (ProxyLocalizations localizations) => localizations.noProxySubjectsTitle,
+      descriptionBuilder: (ProxyLocalizations localizations) => localizations.noProxySubjectsDescription,
       priority: 9999,
     );
   }

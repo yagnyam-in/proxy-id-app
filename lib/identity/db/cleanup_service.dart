@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:proxy_id/config/app_configuration.dart';
 import 'package:proxy_id/identity/model/deposit_entity.dart';
+import 'package:proxy_id/identity/model/pending_subject_entity.dart';
 import 'package:proxy_id/identity/model/proxy_subject_entity.dart';
 import 'package:proxy_id/model/enticement.dart';
 import 'package:proxy_id/services/enticement_service.dart';
@@ -15,7 +16,7 @@ class CleanupService {
     if (proxySubject != null) {
       return dismissEnticementById(
         proxyUniverse: proxySubject.proxyUniverse,
-        enticementId: Enticement.NO_AUTHORIZATIONS,
+        enticementId: Enticement.NO_PROXY_SUBJECTS,
       );
     }
   }
@@ -25,7 +26,7 @@ class CleanupService {
       return Future.wait([
         dismissEnticementById(
           proxyUniverse: deposit.proxyUniverse,
-          enticementId: Enticement.NO_AUTHORIZATIONS,
+          enticementId: Enticement.NO_PROXY_SUBJECTS,
         ),
       ]);
     }
@@ -37,5 +38,16 @@ class CleanupService {
       enticementId: enticementId,
       proxyUniverse: proxyUniverse,
     );
+  }
+
+  Future<void> onPendingProxySubject(PendingSubjectEntity subject) async {
+    if (subject != null) {
+      return Future.wait([
+        dismissEnticementById(
+          proxyUniverse: subject.proxyUniverse,
+          enticementId: Enticement.NO_PROXY_SUBJECTS,
+        ),
+      ]);
+    }
   }
 }

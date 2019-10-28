@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proxy_id/identity/model/proxy_subject_entity.dart';
+import 'package:quiver/strings.dart';
 
 class ProxySubjectCard extends StatelessWidget {
   final ProxySubjectEntity subject;
@@ -23,21 +24,34 @@ class ProxySubjectCard extends StatelessWidget {
     );
   }
 
-  String get name => subject.validName;
+  String getTitle(BuildContext context) {
+    if (isNotEmpty(subject.subjectName)) {
+      return subject.subjectName;
+    }
+    if (isNotEmpty(subject.issuerName)) {
+      return subject.issuerName;
+    }
+    if (isNotEmpty(subject?.subjectDetails?.name)) {
+      return subject.subjectDetails.name;
+    }
+    return subject.subjectId.subjectId;
+  }
 
-  String get issuerName => subject.validIssuerName;
+  String getSubTitle(BuildContext context) {
+    return subject.formatterAadhaarNumber ?? subject.subjectId.subjectId;
+  }
 
   Widget makeListTile(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       title: Text(
-        name,
+        getTitle(context),
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: Padding(
         padding: EdgeInsets.only(top: 8.0),
         child: Text(
-          issuerName,
+          getSubTitle(context),
         ),
       ),
     );
