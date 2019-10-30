@@ -12,11 +12,13 @@ PendingSubjectEntity _$PendingSubjectEntityFromJson(Map json) {
         _$enumDecode(_$SubjectIdTypeEnumEnumMap, json['subjectIdType']),
     proxyUniverse: json['proxyUniverse'] as String,
     ownerProxyId: ProxyId.fromJson(json['ownerProxyId'] as Map),
-    issuerProxyId: ProxyId.fromJson(json['issuerProxyId'] as Map),
+    identityProviderProxyId:
+        ProxyId.fromJson(json['identityProviderProxyId'] as Map),
     signedAadhaarVerificationChallenge:
         AadhaarVerificationChallenge.signedMessageFromJson(
             json['signedAadhaarVerificationChallenge'] as Map),
     active: json['active'] as bool,
+    verified: json['verified'] as bool,
   );
 }
 
@@ -26,7 +28,7 @@ Map<String, dynamic> _$PendingSubjectEntityToJson(
     'subjectIdType': _$SubjectIdTypeEnumEnumMap[instance.subjectIdType],
     'proxyUniverse': instance.proxyUniverse,
     'ownerProxyId': instance.ownerProxyId.toJson(),
-    'issuerProxyId': instance.issuerProxyId.toJson(),
+    'identityProviderProxyId': instance.identityProviderProxyId.toJson(),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -38,6 +40,7 @@ Map<String, dynamic> _$PendingSubjectEntityToJson(
   writeNotNull('signedAadhaarVerificationChallenge',
       instance.signedAadhaarVerificationChallenge?.toJson());
   val['active'] = instance.active;
+  val['verified'] = instance.verified;
   return val;
 }
 

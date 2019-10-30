@@ -23,7 +23,7 @@ class PendingSubjectEntity with ProxyUtils {
   final ProxyId ownerProxyId;
 
   @JsonKey(nullable: false)
-  final ProxyId issuerProxyId;
+  final ProxyId identityProviderProxyId;
 
   @JsonKey(nullable: true, fromJson: AadhaarVerificationChallenge.signedMessageFromJson)
   final SignedMessage<AadhaarVerificationChallenge> signedAadhaarVerificationChallenge;
@@ -48,7 +48,7 @@ class PendingSubjectEntity with ProxyUtils {
     @required this.subjectIdType,
     @required this.proxyUniverse,
     @required this.ownerProxyId,
-    @required this.issuerProxyId,
+    @required this.identityProviderProxyId,
     @required this.signedAadhaarVerificationChallenge,
     bool active,
     bool verified,
@@ -61,7 +61,7 @@ class PendingSubjectEntity with ProxyUtils {
       subjectIdType: SubjectIdTypeEnum.IN_AADHAAR,
       proxyUniverse: signedAadhaarVerificationChallenge.message.proxyUniverse,
       ownerProxyId: signedAadhaarVerificationChallenge.message.ownerProxyId,
-      issuerProxyId: signedAadhaarVerificationChallenge.message.issuerProxyId,
+      identityProviderProxyId: signedAadhaarVerificationChallenge.message.identityProviderProxyId,
       signedAadhaarVerificationChallenge: signedAadhaarVerificationChallenge,
       active: true,
       verified: false,
@@ -74,7 +74,7 @@ class PendingSubjectEntity with ProxyUtils {
       subjectIdType: subjectIdType,
       proxyUniverse: proxyUniverse,
       ownerProxyId: ownerProxyId,
-      issuerProxyId: issuerProxyId,
+      identityProviderProxyId: identityProviderProxyId,
       signedAadhaarVerificationChallenge: signedAadhaarVerificationChallenge,
       active: active ?? this.active,
       verified: verified ?? this.verified,

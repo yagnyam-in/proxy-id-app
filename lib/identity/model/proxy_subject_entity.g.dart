@@ -12,7 +12,8 @@ ProxySubjectEntity _$ProxySubjectEntityFromJson(Map json) {
         _$enumDecode(_$SubjectIdTypeEnumEnumMap, json['subjectIdType']),
     subjectId: ProxySubjectId.fromJson(json['subjectId'] as Map),
     ownerProxyId: ProxyId.fromJson(json['ownerProxyId'] as Map),
-    issuerProxyId: ProxyId.fromJson(json['issuerProxyId'] as Map),
+    identityProviderProxyId:
+        ProxyId.fromJson(json['identityProviderProxyId'] as Map),
     subjectName: json['subjectName'] as String,
     issuerName: json['issuerName'] as String,
     signedProxySubject:
@@ -36,7 +37,7 @@ Map<String, dynamic> _$ProxySubjectEntityToJson(ProxySubjectEntity instance) {
   writeNotNull('subjectName', instance.subjectName);
   writeNotNull('issuerName', instance.issuerName);
   val['ownerProxyId'] = instance.ownerProxyId.toJson();
-  val['issuerProxyId'] = instance.issuerProxyId.toJson();
+  val['identityProviderProxyId'] = instance.identityProviderProxyId.toJson();
   writeNotNull('signedProxySubject', instance.signedProxySubject?.toJson());
   val['active'] = instance.active;
   return val;

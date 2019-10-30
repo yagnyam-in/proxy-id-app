@@ -26,7 +26,7 @@ class ProxySubjectEntity with ProxyUtils {
   final ProxyId ownerProxyId;
 
   @JsonKey(nullable: false)
-  final ProxyId issuerProxyId;
+  final ProxyId identityProviderProxyId;
 
   @JsonKey(nullable: true, fromJson: ProxySubject.signedMessageFromJson)
   final SignedMessage<ProxySubject> signedProxySubject;
@@ -51,7 +51,7 @@ class ProxySubjectEntity with ProxyUtils {
     @required this.subjectIdType,
     @required this.subjectId,
     @required this.ownerProxyId,
-    @required this.issuerProxyId,
+    @required this.identityProviderProxyId,
     @required this.subjectName,
     @required this.issuerName,
     this.signedProxySubject,
@@ -63,9 +63,9 @@ class ProxySubjectEntity with ProxyUtils {
       subjectIdType: SubjectIdTypeEnum.IN_AADHAAR,
       subjectId: signedProxySubject.message.proxySubjectId,
       ownerProxyId: signedProxySubject.message.ownerProxyId,
-      issuerProxyId: signedProxySubject.message.issuerProxyId,
+      identityProviderProxyId: signedProxySubject.message.identityProviderProxyId,
       subjectName: signedProxySubject.message.subjectDetails?.name,
-      issuerName: signedProxySubject.message.issuerProxyId.id,
+      issuerName: signedProxySubject.message.identityProviderProxyId.id,
       signedProxySubject: signedProxySubject,
       active: true,
     );
@@ -80,7 +80,7 @@ class ProxySubjectEntity with ProxyUtils {
       subjectIdType: subjectIdType,
       subjectId: subjectId,
       ownerProxyId: ownerProxyId,
-      issuerProxyId: issuerProxyId,
+      identityProviderProxyId: identityProviderProxyId,
       signedProxySubject: signedProxySubject,
       subjectName: subjectName ?? this.subjectName,
       issuerName: issuerName ?? this.issuerName,
@@ -90,7 +90,7 @@ class ProxySubjectEntity with ProxyUtils {
 
   @override
   String toString() {
-    return "ProxySubjectEntity(subject: ${subjectName ?? subjectId.subjectId}, issuer: ${issuerName ?? issuerProxyId.id}, active: $active)";
+    return "ProxySubjectEntity(subject: ${subjectName ?? subjectId.subjectId}, issuer: ${issuerName ?? identityProviderProxyId.id}, active: $active)";
   }
 
   Map<String, dynamic> toJson() => _$ProxySubjectEntityToJson(this);

@@ -3,12 +3,12 @@ import 'package:meta/meta.dart';
 import 'package:proxy_core/core.dart';
 import 'package:proxy_core/services.dart';
 import 'package:proxy_id/config/app_configuration.dart';
-import 'package:proxy_id/db/service_provider_store.dart';
+import 'package:proxy_id/db/identity_provider_store.dart';
 import 'package:proxy_id/identity/db/pending_subject_store.dart';
 import 'package:proxy_id/identity/db/proxy_subject_store.dart';
 import 'package:proxy_id/identity/model/pending_subject_entity.dart';
 import 'package:proxy_id/identity/model/proxy_subject_entity.dart';
-import 'package:proxy_id/identity/model/service_provider_entity.dart';
+import 'package:proxy_id/identity/model/identity_provider_entity.dart';
 import 'package:proxy_id/identity/subject_input_dialog.dart';
 import 'package:proxy_id/services/service_helper.dart';
 import 'package:proxy_id/url_config.dart';
@@ -39,12 +39,12 @@ class IdentityService with ProxyUtils, HttpClientUtils, ServiceHelper, DebugUtil
     assert(isNotEmpty(this.proxyBankingUrl));
   }
 
-  Future<ServiceProviderEntity> _fetchDefaultServiceProvider({String proxyUniverse}) {
+  Future<IdentityProviderEntity> _fetchDefaultIdentityProvider({String proxyUniverse}) {
     proxyUniverse = proxyUniverse ?? appConfiguration.proxyUniverse;
-    String serviceProviderId = proxyUniverse == ProxyUniverse.PRODUCTION ? "aadhaar" : "test-aadhaar";
-    return ServiceProviderStore().fetchServiceProvider(
+    String identityProviderId = proxyUniverse == ProxyUniverse.PRODUCTION ? "aadhaar" : "test-aadhaar";
+    return IdentityProviderStore().fetchIdentityProvider(
       proxyUniverse: proxyUniverse,
-      serviceProviderId: serviceProviderId,
+      identityProviderId: identityProviderId,
     );
   }
 
@@ -53,12 +53,12 @@ class IdentityService with ProxyUtils, HttpClientUtils, ServiceHelper, DebugUtil
     @required String proxyUniverse,
     @required SubjectInput input,
   }) async {
-    ServiceProviderEntity serviceProvider = await _fetchDefaultServiceProvider(proxyUniverse: proxyUniverse);
+    IdentityProviderEntity identityProvider = await _fetchDefaultIdentityProvider(proxyUniverse: proxyUniverse);
     AadhaarVerificationRequest request = AadhaarVerificationRequest(
       requestId: uuidFactory.v4(),
       proxyUniverse: proxyUniverse,
       ownerProxyId: ownerProxyId,
-      issuerProxyId: serviceProvider.serviceProviderProxyId,
+      identityProviderProxyId: identityProvider.identityProviderProxyId,
       aadhaarNumber: input.aadhaarNumber,
     );
     final signedRequest = await signMessage(
